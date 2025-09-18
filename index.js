@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const i18nextMiddleware = require("i18next-http-middleware"); // ✅ updated middleware
 const i18n = require("./i18n");
-const cryptoRoutes = require("./routes/crypto"); 
+const cryptoRoutes = require("./routes/crypto");
 
 dotenv.config();
 
@@ -15,12 +15,27 @@ const PORT = process.env.PORT || 5000;
 app.use(i18nextMiddleware.handle(i18n));
 
 // Middleware
+// Middleware
+const allowedOrigins = [
+  "http://localhost:3000", // local dev
+  "https://majestic-rabanadas-1fe081.netlify.app/", // your deployed frontend
+];
+
 app.use(
   cors({
-    origin: "http://localhost:3000", // your frontend origin
+    origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
     credentials: true, // allow cookies/auth headers
   })
 );
+
 app.use(express.json());
 
 // Routes
