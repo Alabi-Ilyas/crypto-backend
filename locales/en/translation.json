@@ -1,0 +1,65 @@
+{
+  "auth": {
+    "welcome": "Welcome, {{name}}!",
+    "register_success": "Registration successful, verification email sent",
+    "login_success": "Login successful",
+    "logout_success": "User logged out",
+    "verification_email_subject": "Verify Your Email",
+    "verification_email_body": "Hi {{firstName}},\n\nThanks for registering! Click the link below to verify your email:\n{{verificationUrl}}\n\nIf you didn't register, please ignore this email.",
+    "password_reset_request_subject": "Password Reset Request",
+    "password_reset_request_body": "You requested a password reset.\nClick here to reset your password: {{resetUrl}}\nThis link expires in 15 minutes.",
+    "password_reset_success": "Password reset successful",
+    "email_verification_required": "Please verify your email before logging in"
+  },
+  "deposits": {
+    "created": "Deposit created successfully",
+    "updated": "Deposit status updated successfully",
+    "not_found": "Deposit not found"
+  },
+  "withdrawals": {
+    "created": "Withdrawal request submitted successfully",
+    "updated": "Withdrawal status updated successfully",
+    "not_found": "Withdrawal not found",
+    "invalid_status": "Invalid status value"
+  },
+  "investments": {
+    "created": "Investment started successfully",
+    "not_found": "Investment not found"
+  },
+  "plans": {
+    "created": "Plan created successfully",
+    "updated": "Plan updated successfully",
+    "deleted": "Plan deleted successfully",
+    "not_found": "Plan not found"
+  },
+  "security": {
+    "events_fetched": "Security events retrieved successfully",
+    "access_denied": "Access denied"
+  },
+  "success": {
+    "roleUpdated": "Role updated successfully"
+  },
+  "errors": {
+    "accessDenied": "Access denied",
+    "serverError": "An error occurred: {{error}}",
+    "userNotFound": "User not found",
+    "userExists": "User already exists",
+    "invalidCredentials": "Invalid credentials",
+    "invalidStatus": "Invalid status",
+    "depositNotFound": "Deposit not found",
+    "withdrawalNotFound": "Withdrawal not found",
+    "investmentNotFound": "Investment not found",
+    "planNotFound": "Plan not found",
+    "tokenInvalid": "Invalid or expired token",
+    "allFieldsRequired": "All fields are required"
+  },
+  "system": {
+    "tokenRefreshed": "Token refreshed successfully"
+  },
+  "withdrawalMethods": {
+  "created": "Withdrawal method created successfully",
+  "deleted": "Withdrawal method deleted successfully",
+  "notFound": "Withdrawal method not found"
+}
+
+}

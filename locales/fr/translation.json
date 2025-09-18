@@ -1,0 +1,64 @@
+{
+  "auth": {
+    "welcome": "Bienvenue, {{name}} !",
+    "register_success": "Inscription réussie, e-mail de vérification envoyé",
+    "login_success": "Connexion réussie",
+    "logout_success": "Déconnexion réussie",
+    "verification_email_subject": "Vérifiez votre e-mail",
+    "verification_email_body": "Bonjour {{firstName}},\n\nMerci pour votre inscription ! Cliquez sur le lien ci-dessous pour vérifier votre e-mail :\n{{verificationUrl}}\n\nSi vous ne vous êtes pas inscrit, ignorez cet e-mail.",
+    "password_reset_request_subject": "Demande de réinitialisation du mot de passe",
+    "password_reset_request_body": "Vous avez demandé une réinitialisation de mot de passe.\nCliquez ici pour réinitialiser votre mot de passe : {{resetUrl}}\nCe lien expire dans 15 minutes.",
+    "password_reset_success": "Réinitialisation du mot de passe réussie",
+    "email_verification_required": "Veuillez vérifier votre e-mail avant de vous connecter"
+  },
+  "deposits": {
+    "created": "Dépôt créé avec succès",
+    "updated": "Statut du dépôt mis à jour avec succès",
+    "not_found": "Dépôt introuvable"
+  },
+  "withdrawals": {
+    "created": "Demande de retrait soumise avec succès",
+    "updated": "Statut du retrait mis à jour avec succès",
+    "not_found": "Retrait introuvable",
+    "invalid_status": "Valeur de statut invalide"
+  },
+  "investments": {
+    "created": "Investissement démarré avec succès",
+    "not_found": "Investissement introuvable"
+  },
+  "plans": {
+    "created": "Plan créé avec succès",
+    "updated": "Plan mis à jour avec succès",
+    "deleted": "Plan supprimé avec succès",
+    "not_found": "Plan introuvable"
+  },
+  "security": {
+    "events_fetched": "Événements de sécurité récupérés avec succès",
+    "access_denied": "Accès refusé"
+  },
+  "success": {
+    "roleUpdated": "Rôle mis à jour avec succès"
+  },
+  "errors": {
+    "accessDenied": "Accès refusé",
+    "serverError": "Une erreur est survenue : {{error}}",
+    "userNotFound": "Utilisateur introuvable",
+    "userExists": "L'utilisateur existe déjà",
+    "invalidCredentials": "Identifiants invalides",
+    "invalidStatus": "Statut invalide",
+    "depositNotFound": "Dépôt introuvable",
+    "withdrawalNotFound": "Retrait introuvable",
+    "investmentNotFound": "Investissement introuvable",
+    "planNotFound": "Plan introuvable",
+    "tokenInvalid": "Jeton invalide ou expiré",
+    "allFieldsRequired": "Tous les champs sont obligatoires"
+  },
+  "system": {
+    "tokenRefreshed": "Jeton actualisé avec succès"
+  },
+  "withdrawalMethods": {
+    "created": "Méthode de retrait créée avec succès",
+    "deleted": "Méthode de retrait supprimée avec succès",
+    "notFound": "Méthode de retrait introuvable"
+  }
+}
