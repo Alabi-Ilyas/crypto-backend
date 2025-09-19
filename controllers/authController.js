@@ -14,6 +14,11 @@ const generateToken = (id) => {
 const registerUser = async (req, res) => {
   try {
     const { firstName, lastName, email, password, role } = req.body;
+    // ✅ Check captcha
+    const captchaValid = await verifyCaptcha(captchaToken);
+    if (!captchaValid) {
+      return res.status(400).json({ message: "Captcha verification failed" });
+    }
 
     if (!firstName || !lastName || !email || !password) {
       return res
@@ -74,6 +79,12 @@ const registerUser = async (req, res) => {
 // Login user
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
+    // ✅ Check captcha
+  const captchaValid = await verifyCaptcha(captchaToken);
+  if (!captchaValid) {
+    return res.status(400).json({ message: "Captcha verification failed" });
+  }
+
   const user = await User.findOne({ email });
 
   if (user && (await bcrypt.compare(password, user.password))) {
