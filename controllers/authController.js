@@ -13,22 +13,25 @@ const generateToken = (id) => {
 // Register new user
 const registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, role } = req.body;
-    // ✅ Check captcha
+    const { firstName, lastName, email, password, role, captchaToken } = req.body; // ✅ include captchaToken
+
+    if (!captchaToken) {
+      return res.status(400).json({ message: "Captcha is required" });
+    }
+
     const captchaValid = await verifyCaptcha(captchaToken);
     if (!captchaValid) {
       return res.status(400).json({ message: "Captcha verification failed" });
     }
 
     if (!firstName || !lastName || !email || !password) {
-      return res
-        .status(400)
-        .json({ message: req.t("errors.allFieldsRequired") });
+      return res.status(400).json({ message: req.t("errors.allFieldsRequired") });
     }
 
     const userExists = await User.findOne({ email });
-    if (userExists)
+    if (userExists) {
       return res.status(400).json({ message: req.t("errors.userExists") });
+    }
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -70,43 +73,50 @@ const registerUser = async (req, res) => {
     });
   } catch (err) {
     console.error("Register error:", err);
-    res
-      .status(500)
-      .json({ message: req.t("errors.serverError", { error: err.message }) });
+    res.status(500).json({ message: req.t("errors.serverError", { error: err.message }) });
   }
 };
 
 // Login user
 const loginUser = async (req, res) => {
-  const { email, password } = req.body;
-    // ✅ Check captcha
-  const captchaValid = await verifyCaptcha(captchaToken);
-  if (!captchaValid) {
-    return res.status(400).json({ message: "Captcha verification failed" });
-  }
+  try {
+    const { email, password, captchaToken } = req.body; // ✅ include captchaToken
 
-  const user = await User.findOne({ email });
+    if (!captchaToken) {
+      return res.status(400).json({ message: "Captcha is required" });
+    }
 
-  if (user && (await bcrypt.compare(password, user.password))) {
-    user.lastLogin = new Date();
-    await user.save();
+    const captchaValid = await verifyCaptcha(captchaToken);
+    if (!captchaValid) {
+      return res.status(400).json({ message: "Captcha verification failed" });
+    }
 
-    res.json({
-      user: {
-        _id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        role: user.role,
-        isVerified: user.isVerified,
-        mfaEnabled: user.mfaEnabled,
-        lastLogin: user.lastLogin,
-      },
-      token: generateToken(user.id),
-      message: req.t("success.login"),
-    });
-  } else {
-    res.status(400).json({ message: req.t("errors.invalidCredentials") });
+    const user = await User.findOne({ email });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      user.lastLogin = new Date();
+      await user.save();
+
+      res.json({
+        user: {
+          _id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          role: user.role,
+          isVerified: user.isVerified,
+          mfaEnabled: user.mfaEnabled,
+          lastLogin: user.lastLogin,
+        },
+        token: generateToken(user.id),
+        message: req.t("success.login"),
+      });
+    } else {
+      res.status(400).json({ message: req.t("errors.invalidCredentials") });
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ message: req.t("errors.serverError", { error: err.message }) });
   }
 };
 
