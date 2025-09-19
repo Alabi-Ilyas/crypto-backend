@@ -2,7 +2,7 @@ const axios = require("axios");
 
 const verifyCaptcha = async (token) => {
   try {
-    const secret = process.env.RECAPTCHA_SECRET;
+    const secret = process.env.RECAPTCHA_SECRET_KEY;
     const response = await axios.post(
       "https://www.google.com/recaptcha/api/siteverify",
       new URLSearchParams({
@@ -17,7 +17,10 @@ const verifyCaptcha = async (token) => {
 
     return response.data.success;
   } catch (err) {
-    console.error("Captcha verification error:", err.response?.data || err.message);
+    console.error(
+      "Captcha verification error:",
+      err.response?.data || err.message
+    );
     return false;
   }
 };
