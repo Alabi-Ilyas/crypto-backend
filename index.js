@@ -18,7 +18,7 @@ app.use(i18nextMiddleware.handle(i18n));
 // Middleware
 const allowedOrigins = [
   "http://localhost:3000", // local dev
-  "https://majestic-rabanadas-1fe081.netlify.app/", // your deployed frontend
+  "https://majestic-rabanadas-1fe081.netlify.app", // your deployed frontend
 ];
 
 app.use(
