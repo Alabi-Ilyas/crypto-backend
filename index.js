@@ -18,23 +18,36 @@ app.use(i18nextMiddleware.handle(i18n));
 // Middleware
 const allowedOrigins = [
   "http://localhost:3000", // local dev
-  "https://majestic-rabanadas-1fe081.netlify.app", // your deployed frontend
+  "https://majestic-rabanadas-1fe081.netlify.app", // deployed frontend
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin (like mobile apps or curl)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = `The CORS policy for this site does not allow access from the specified Origin: ${origin}`;
-        return callback(new Error(msg), false);
-      }
-      return callback(null, true);
-    },
-    credentials: true, // allow cookies/auth headers
-  })
-);
+// CORS middleware
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (!origin) {
+    // allow requests with no origin (curl, mobile apps)
+    return next();
+  }
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET,POST,PUT,PATCH,DELETE,OPTIONS"
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    if (req.method === "OPTIONS") return res.sendStatus(204);
+    return next();
+  } else {
+    return res
+      .status(403)
+      .send(`CORS policy does not allow access from ${origin}`);
+  }
+});
+
 
 app.use(express.json());
 
