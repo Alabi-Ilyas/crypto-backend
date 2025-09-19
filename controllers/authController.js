@@ -2,7 +2,6 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const verifyCaptcha = require("../utils/verifycaptcha");
 const { sendEmail } = require("../utils/sendEmail");
 
 // Generate JWT
@@ -13,16 +12,9 @@ const generateToken = (id) => {
 // Register new user
 const registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, role, captchaToken } = req.body; // ✅ include captchaToken
+    const { firstName, lastName, email, password, role,  } = req.body; // ✅ include captchaToken
 
-    if (!captchaToken) {
-      return res.status(400).json({ message: "Captcha is required" });
-    }
-
-    const captchaValid = await verifyCaptcha(captchaToken);
-    if (!captchaValid) {
-      return res.status(400).json({ message: "Captcha verification failed" });
-    }
+    
 
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ message: req.t("errors.allFieldsRequired") });
@@ -80,16 +72,9 @@ const registerUser = async (req, res) => {
 // Login user
 const loginUser = async (req, res) => {
   try {
-    const { email, password, captchaToken } = req.body; // ✅ include captchaToken
+    const { email, password,  } = req.body; // ✅ include captchaToken
 
-    if (!captchaToken) {
-      return res.status(400).json({ message: "Captcha is required" });
-    }
-
-    const captchaValid = await verifyCaptcha(captchaToken);
-    if (!captchaValid) {
-      return res.status(400).json({ message: "Captcha verification failed" });
-    }
+   
 
     const user = await User.findOne({ email });
 

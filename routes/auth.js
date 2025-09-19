@@ -12,12 +12,14 @@ const {
   saveMFASetup,
 } = require("../controllers/authController");
 const { protect } = require("../middleware/authMiddleware");
+const captchaMiddleware = require("../middleware/captchaMiddleware");
+
 
 const router = express.Router();
 
 // Public routes
-router.post("/register", registerUser);
-router.post("/login", loginUser);
+router.post("/register",captchaMiddleware, registerUser);
+router.post("/login", captchaMiddleware, loginUser);
 router.post("/password/forgot", forgotPassword);
 router.post("/password/reset/:token", resetPassword);
 router.post("/refresh", refreshToken);
