@@ -1,25 +1,29 @@
+// cryptoController.js
 const axios = require("axios");
 
 // Simple in-memory cache
-let marketsCache = null;
-let marketsCacheTime = 0;
-let ohlcCache = {};
-const CACHE_DURATION = 60 * 1000; // 1 minute
+// You can later replace this with Redis or a database if needed
+let cache = {};
 
-// ---------------------- OHLC ----------------------
+// Helper function: check cache
+function getFromCache(key, ttl = 60000) {
+  if (cache[key] && Date.now() - cache[key].timestamp < ttl) {
+    return cache[key].data;
+  }
+  return null;
+}
+
+// OHLC endpoint
 exports.getOHLC = async (req, res) => {
   try {
     const { coin } = req.params;
     const { days } = req.query;
-    const cacheKey = `${coin}-${days}`;
-    const now = Date.now();
+    const key = `ohlc_${coin}_${days}`;
 
-    // Serve from cache if available
-    if (
-      ohlcCache[cacheKey] &&
-      now - ohlcCache[cacheKey].time < CACHE_DURATION
-    ) {
-      return res.json(ohlcCache[cacheKey].data);
+    // ✅ Check cache first
+    const cachedData = getFromCache(key, 60000); // cache for 60s
+    if (cachedData) {
+      return res.json(cachedData);
     }
 
     const response = await axios.get(
@@ -38,32 +42,25 @@ exports.getOHLC = async (req, res) => {
       isGreen: item[4] >= item[1],
     }));
 
-    // Save to cache
-    ohlcCache[cacheKey] = { data: ohlcData, time: now };
+    // ✅ Save in cache
+    cache[key] = { data: ohlcData, timestamp: Date.now() };
 
     res.json(ohlcData);
   } catch (err) {
-    console.error("Error fetching OHLC:", err.message);
-
-    if (err.response?.status === 429) {
-      return res.status(429).json({
-        message: "Rate limit hit. Please try again later.",
-        retryAfter: err.response.headers["retry-after"] || 60,
-      });
-    }
-
-    res.status(500).json({ message: "Error fetching crypto data" });
+    console.error("Error fetching OHLC data:", err.message);
+    res.status(500).json({ message: "Error fetching crypto OHLC data" });
   }
 };
 
-// ---------------------- MARKETS ----------------------
+// Markets endpoint
 exports.getMarkets = async (req, res) => {
   try {
-    const now = Date.now();
+    const key = "markets";
 
-    // Serve cached data if it's still fresh
-    if (marketsCache && now - marketsCacheTime < CACHE_DURATION) {
-      return res.json(marketsCache);
+    // ✅ Check cache (2 minutes for markets)
+    const cachedData = getFromCache(key, 120000);
+    if (cachedData) {
+      return res.json(cachedData);
     }
 
     const response = await axios.get(
@@ -89,21 +86,12 @@ exports.getMarkets = async (req, res) => {
       marketCap: coin.market_cap,
     }));
 
-    // Save to cache
-    marketsCache = data;
-    marketsCacheTime = now;
+    // ✅ Save in cache
+    cache[key] = { data, timestamp: Date.now() };
 
     res.json(data);
   } catch (err) {
     console.error("Error fetching market data:", err.message);
-
-    if (err.response?.status === 429) {
-      return res.status(429).json({
-        message: "Rate limit hit. Please try again later.",
-        retryAfter: err.response.headers["retry-after"] || 60,
-      });
-    }
-
     res.status(500).json({ message: "Error fetching market data" });
   }
 };
