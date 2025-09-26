@@ -18,7 +18,8 @@ app.use(i18nextMiddleware.handle(i18n));
 // Middleware
 const allowedOrigins = [
   "http://localhost:3000", // local dev
-  "https://majestic-rabanadas-1fe081.netlify.app", // deployed frontend
+  "https://majestic-rabanadas-1fe081.netlify.app",
+  "https://taupe-piroshki-b95c2e.netlify.app", // deployed frontend
 ];
 
 // CORS middleware
@@ -47,7 +48,6 @@ app.use((req, res, next) => {
       .send(`CORS policy does not allow access from ${origin}`);
   }
 });
-
 
 app.use(express.json());
 
