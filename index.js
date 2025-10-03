@@ -19,7 +19,8 @@ app.use(i18nextMiddleware.handle(i18n));
 const allowedOrigins = [
   "http://localhost:3000", // local dev
   "https://majestic-rabanadas-1fe081.netlify.app",
-  "https://taupe-piroshki-b95c2e.netlify.app", // deployed frontend
+  "https://taupe-piroshki-b95c2e.netlify.app", 
+  "https://soveriegnassetinc.com", // deployed frontend
 ];
 
 // CORS middleware
