@@ -38,19 +38,19 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       role: role || "user",
       verificationToken,
-      isVerified: false,
+      isVerified: true,
     });
 
     // Send verification email
-    const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
-    await sendEmail(
-      user.email,
-      req.t("emails.verifySubject"),
-      `<p>${req.t("emails.verifyGreeting", { name: user.firstName })}</p>
-       <p>${req.t("emails.verifyInstruction")}</p>
-       <a href="${verificationUrl}">${verificationUrl}</a>
-       <p>${req.t("emails.ignoreIfNotYou")}</p>`
-    );
+    // const verificationUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+    // await sendEmail(
+    //   user.email,
+    //   req.t("emails.verifySubject"),
+    //   `<p>${req.t("emails.verifyGreeting", { name: user.firstName })}</p>
+    //    <p>${req.t("emails.verifyInstruction")}</p>
+    //    <a href="${verificationUrl}">${verificationUrl}</a>
+    //    <p>${req.t("emails.ignoreIfNotYou")}</p>`
+    // );
 
     res.status(201).json({
       user: {
