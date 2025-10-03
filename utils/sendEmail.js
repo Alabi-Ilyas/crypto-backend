@@ -14,16 +14,15 @@ const transporter = nodemailer.createTransport({
 const sendEmail = async (to, subject, html) => {
   try {
     const info = await transporter.sendMail({
-      from: `"Sovereign Assets" <${process.env.SMTP_USER}>`, // must match SMTP_USER
+      from: `"Sovereign Assets" <${process.env.SMTP_USER}>`,
       to,
       subject,
       html,
     });
-
-    console.log("✅ Email sent:", info.messageId);
+    console.log("Email sent:", info.messageId);
     return info;
   } catch (error) {
-    console.error("❌ Error sending email:", error.message);
+    console.error("Error sending email:", error.message, error);
     throw new Error("Email could not be sent");
   }
 };
